@@ -13,6 +13,7 @@ RUN go build -o app server/server.go
 
 # Expose the port
 EXPOSE 8080:8080
+EXPOSE 443:443
 
 # Run the executable
 CMD ["./app"]

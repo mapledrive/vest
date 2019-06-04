@@ -9,6 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"golang.org/x/crypto/acme/autocert"
+
 	"context"
 
 	"github.com/dimfeld/httptreemux"
@@ -216,8 +218,9 @@ type HTTPServer struct {
 	HTTPSPort int
 	api.APIer
 
-	shutdown      chan struct{}
-	doneServeHTTP chan struct{}
+	shutdown       chan struct{}
+	doneServeHTTP  chan struct{}
+	doneServeHTTPS chan struct{}
 }
 
 type routeMethods map[string]http.Handler
@@ -312,13 +315,16 @@ func makeRouter(r routePaths, methodNotAllowed, notFound http.Handler) http.Hand
 func (s *HTTPServer) Start() {
 	s.shutdown = make(chan struct{})
 	s.doneServeHTTP = make(chan struct{})
+	s.doneServeHTTPS = make(chan struct{})
 
 	go s.serveHTTP()
+	go s.serveHTTPS()
 }
 
 func (s *HTTPServer) Close() error {
 	close(s.shutdown)
 	<-s.doneServeHTTP
+	<-s.doneServeHTTPS
 	return nil
 }
 
@@ -366,6 +372,78 @@ func (s *HTTPServer) serveHTTP() {
 
 				log.Info("serving http", "address", addr)
 				switch err := server.Serve(listener); err {
+				case nil, http.ErrServerClosed:
+				default:
+					log.Error(err)
+				}
+			}()
+
+			select {
+			case <-s.shutdown:
+			case <-serverClosed:
+			}
+
+			if err := server.Shutdown(ctx); err != nil {
+				log.Error(err)
+			}
+		}()
+
+		select {
+		case <-s.shutdown:
+			return
+		case <-time.After(time.Second):
+		}
+	}
+}
+
+func (s *HTTPServer) serveHTTPS() {
+	defer close(s.doneServeHTTPS)
+
+	crs := corsHandler()
+
+	ctx := context.Background()
+
+	nonBatchRoutes := func() router {
+		return func(h http.Handler) http.Handler {
+			return panicLogHandler{
+				crs.Handler(
+					commonParamHandler{
+						h,
+					},
+				),
+			}
+		}
+	}
+
+	builder := routeBuilder{
+		api:    s.APIer,
+		routes: nonBatchRoutes(),
+	}
+
+	h := builder.build()
+
+	for {
+		func() {
+			addr := ":" + strconv.Itoa(s.HTTPSPort)
+
+			m := &autocert.Manager{
+				Cache:  autocert.DirCache(".cert"),
+				Prompt: autocert.AcceptTOS,
+				HostPolicy: autocert.HostWhitelist(
+					"thevest.org",
+					"www.thevest.org",
+					"api.thevest.org",
+					"ec2-54-84-182-191.compute-1.amazonaws.com"),
+			}
+
+			server := &http.Server{Handler: h, Addr: ":https", TLSConfig: m.TLSConfig()}
+
+			serverClosed := make(chan struct{})
+			go func() {
+				defer close(serverClosed)
+
+				log.Info("serving https", "address", addr)
+				switch err := server.ListenAndServeTLS("", ""); err {
 				case nil, http.ErrServerClosed:
 				default:
 					log.Error(err)

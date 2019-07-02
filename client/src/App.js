@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./App.css";
 import Header from "./components/Header";
 import CumulativeContainer from "./containers/CumulativeContainer";
 import SidebarContainer from "./containers/SidebarContainer";

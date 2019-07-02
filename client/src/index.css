@@ -16,3 +16,154 @@ body {
   font-family: "myriad-pro-bold";
   src: local("MyFont"), url(./fonts/myriad-pro-bold.woff2) format("woff");
 }
+
+
+
+
+.container-fluid {
+  padding-top: 0.75rem;
+}
+.card {
+  margin-bottom: 0.75rem;
+  border: 0;
+  background-color: #f5f8fa;
+  border-radius: 0.25rem;
+  background-clip: border-box;
+}
+.card-body {
+  padding: 0.75rem;
+  flex: 1 1 auto;
+}
+
+.card h1 {
+  padding: 0;
+  margin: 0;
+  font-size: 24px;
+  color: #323c46;
+  line-height: 34px;
+  display: inline-block;
+  font-weight: 700;
+}
+
+.card h4 {
+  font-size: 15px;
+  padding: 0;
+  text-align: center;
+  color: #969ba0;
+  font-weight: 700;
+}
+
+.searching {
+  color: rgba(50, 60, 70, 0.75);
+  font-size: 18px;
+  line-height: 34px;
+  font-weight: 700;
+}
+
+.mini-padding {
+  padding-right: 0.375rem;
+  padding-left: 0.375rem;
+}
+
+.no-padding {
+  padding-right: 0rem;
+  padding-left: 0rem;
+}
+
+
+
+.navbar-brand {
+	width: 154px;
+	height: 40px;
+	font-size: 0;
+	background-size: auto auto;
+	background-size: contain;
+	margin: 0;
+	margin-left: 0.1875rem;
+	padding: 0;
+}
+
+
+
+.nav-link {
+  font-size: 14px;
+}
+
+.pattern-filter {
+  width: 112px;
+  height: 34px;
+  line-height: 24px;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 0.24rem 0.72rem;
+  border: 1px solid transparent;
+}
+.date-separator {
+  width: 28px;
+  font-size: 24px;
+  line-height: 32px;
+  text-align: center;
+}
+
+.pattern-filter::after {
+  position: relative;
+  left: 2px;
+  top: 2px;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: "";
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
+  border-bottom: 0;
+  border-left: 0.3em solid transparent;
+  box-sizing: border-box;
+}
+
+.controller {
+  color: rgba(50, 60, 70, 0.75);
+  border-color: hsla(210, 5%, 61%, 0.5);
+  background-color: transparent;
+  text-align: left;
+}
+
+.controller:hover {
+  background-color: #969ba0;
+  color: #f5f8fa;
+}
+
+.year{
+	width: 150px;
+	color: ;
+    border-color: hsla(210, 5%, 61%, 0.5);
+	background-color: transparent;
+	outline: 0;
+	outline-style: none;
+}
+
+.year:focus{
+	background-color: transparent;
+    border-color: hsla(210, 5%, 61%, 0.5);
+	box-shadow: none;
+	outline: 0;
+}
+
+
+
+
+
+.tt-input {
+	width: 100%;
+	height: 34px;
+	font-size: 18px;
+	line-height: 1;
+	border: 0;
+	background-color: transparent !important;
+	color: rgba(50,60,70,.75);
+	padding: 8px 6px;
+	outline-style: none;
+	box-shadow: none;
+	font-weight: 700;
+}

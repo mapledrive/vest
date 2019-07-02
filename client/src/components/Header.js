@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import { Link } from 'react-router-dom';
+import Logo from "../components/Logo";
 
 class Header extends Component {
 	constructor(props) {
@@ -14,7 +15,9 @@ class Header extends Component {
 	render(){
 		return (
     <nav className="navbar navbar-expand-xl bg-light navbar-light">
-	  <Link className="navbar-brand" to='/'></Link> 
+	  <div className="navbar-brand">
+          <Logo />
+        </div>
       <button
         className="navbar-toggler"
         type="button"

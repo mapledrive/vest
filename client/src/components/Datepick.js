@@ -8,7 +8,7 @@ class Example extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      startDate: new Date(2018,4,10),
+      startDate: new Date(2018,6,10),
 	  endDate: new Date()
     };
     this.handleChangeStart = this.handleChangeStart.bind(this);
@@ -33,7 +33,7 @@ class Example extends Component {
 	<div>
         <DatePicker
 			customInput={<ExampleCustomInput />}
-			dateFormat="d MMMM"
+			
 			selected={this.state.startDate}
 			selectsStart
 			startDate={this.state.startDate}
@@ -43,7 +43,7 @@ class Example extends Component {
 		<span className="date-separator"> - </span>
 		<DatePicker
 			customInput={<ExampleCustomInput />}
-			dateFormat="d MMMM"
+			
 			selected={this.state.endDate}
 			selectsEnd
 			startDate={this.state.startDate}
